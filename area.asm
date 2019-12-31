@@ -1,0 +1,41 @@
+.MODEL SMALL
+.STACK 100H
+.DATA
+    LENGHT  DB  10 
+    WIDHT   DB  5
+    HEIGHT  DB  6
+    RESULT  DW  ?
+.CODE
+MAIN PROC
+    MOV AX, @DATA
+    MOV DS, AX
+
+    MOV AL, LENGHT
+    MOV BL, WIDHT
+    MUL BL
+    MOV BX, AX
+
+    MOV AL, LENGHT
+    MOV CL, HEIGHT
+    MUL CL
+    MOV CX, AX
+
+    MOV AL, WIDHT
+    MOV DL, HEIGHT
+    MUL DL
+    MOV DX, AX
+
+    ADD BX, CX
+    ADD BX, DX
+
+    MOV AX, 2
+
+    MUL BX
+    
+    MOV RESULT, AX
+
+    MOV AH, 4CH
+    INT 21H
+
+MAIN ENDP
+END MAIN
