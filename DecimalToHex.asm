@@ -1,0 +1,52 @@
+.MODEL SMALL
+.STACK 100H
+.DATA
+    MSG1    DB 10,13,'INPUT NUMBER 00 - 15:- $'
+    MSG2    DB 10,13,'NUMBER IN HEX:- $'
+    INPUT1  DB ?
+    INPUT2  DB ?
+.CODE
+MAIN PROC
+    MOV AX, @DATA
+    MOV DS, AX
+
+    MOV AH, 09H
+    LEA DX, MSG1
+    INT 21H
+
+    MOV BL, 10
+
+    MOV AH, 01H
+    INT 21H
+    SUB AL, 30H
+    MUL BL
+    MOV INPUT1, AL
+
+    MOV AH, 01H
+    INT 21H
+    SUB AL, 30H
+    MOV INPUT2, AL
+
+    MOV AH, INPUT1
+    MOV AL, INPUT2
+
+    ADD AL, AH
+
+    ADD AL, 30H
+    CMP AL, 39H
+    JLE PRINT
+    ADD AL, 07H
+
+PRINT:MOV AH, 09H
+    LEA DX, MSG2
+    INT 21H
+
+    MOV AH, 02H
+    MOV DL, AL
+    INT 21H
+    
+    MOV AH, 4CH
+    INT 21H
+
+MAIN ENDP
+END MAIN
