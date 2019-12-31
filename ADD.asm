@@ -1,0 +1,73 @@
+.MODEL SMALL
+.STACK 100H
+.DATA
+    MSG1   DB 10,13,'INPUT FIRST NUMBER:- $'
+    MSG2   DB 10,13,'INPUT SECOND NUMBER:- $'
+    MSG3   DB 10,13,'ADDED NUMBERS FROM MEMORY:- $'
+    A      DW ?
+    B      DW ?
+    RESULT DW ?
+.CODE
+MAIN PROC
+    MOV AX, @DATA
+    MOV DS, AX
+
+    MOV AH, 09H
+    LEA DX, MSG1
+    INT 21H
+
+    MOV AH, 01H
+    INT 21H
+    SUB AL, 30H
+    AND AX, 00FFH
+    MOV A, AX
+    
+    MOV AH, 09H
+    LEA DX, MSG2
+    INT 21H
+
+    MOV AH, 01H
+    INT 21H
+    SUB AL, 30H
+    AND AX, 00FFH
+    MOV B, AX
+
+    MOV AX, A
+    MOV BX, B 
+
+    ADD AX, BX
+
+    MOV RESULT, AX
+
+    MOV AH, 09H
+    LEA DX, MSG3
+    INT 21H
+
+    MOV BX, RESULT
+
+    MOV CX, 4H
+
+START:
+    PUSH CX
+
+    MOV CL, 4
+    ROL BX, CL
+    POP CX
+    MOV DL, BL
+    AND DL, 0FH
+    ADD DL, 30H
+    CMP DL, 39H
+    JLE PRINT
+    ADD DL, 07H
+
+PRINT:
+    MOV AH, 02H
+    INT 21H
+
+    LOOP START
+    
+    MOV AH, 4CH
+    INT 21H
+
+MAIN ENDP
+END MAIN
