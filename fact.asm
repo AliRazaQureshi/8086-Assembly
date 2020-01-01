@@ -1,0 +1,59 @@
+.MODEL SMALL
+.STACK 100H
+.DATA
+    MSG1   DB 10,13,'ENTER NUMBER N:- $'
+    MSG2   DB 10,13,'FACTORIAL N IS:- $'
+.CODE
+MAIN PROC
+    MOV AX, @DATA
+    MOV DS, AX
+
+    MOV AH, 09H
+    LEA DX, MSG1
+    INT 21H
+
+    MOV AH, 01H
+    INT 21H
+
+    SUB AL, 30H
+    MOV CL, AL
+    AND CX, 00FFH
+    MOV BX, 1
+
+    MOV AH, 09H
+    LEA DX, MSG2
+    INT 21H
+FACT:
+    MOV AX, CX
+
+    MUL BX
+
+    MOV BX,AX
+
+    LOOP FACT
+
+    MOV CX, 4H
+
+START:
+    PUSH CX
+
+    MOV CL, 4
+    ROL BX, CL
+    POP CX
+    MOV DL, BL
+    AND DL, 0FH
+    ADD DL, 30H
+    CMP DL, 39H
+    JLE PRINT
+    ADD DL, 07H
+
+PRINT:
+    MOV AH, 02H
+    INT 21H
+
+    LOOP START
+
+    MOV AH, 4CH
+    INT 21H
+MAIN ENDP
+END MAIN
