@@ -1,0 +1,62 @@
+.MODEL SMALL
+.STACK 100H
+.DATA
+    MSG1   DB 10,13,'FIND NUMBER OF 1s IN NUMBER$'
+    MSG2   DB 10,13,'1s:- $'
+.CODE
+MAIN PROC
+    MOV AX, @DATA
+    MOV DS, AX
+
+    MOV AH, 09H
+    LEA DX, MSG1
+    INT 21H
+
+    
+    MOV AH, 09H
+    LEA DX, MSG2
+    INT 21H
+
+    MOV DX, 0
+    MOV CX, 16
+    
+    MOV BX, 22H
+
+AGAIN:
+    ROL BX, 1
+    PUSH BX
+    AND BX, 1H
+    MOV BH, 1H
+    CMP BL, BH
+    JNE REPEAT
+    ADD DX, 1
+REPEAT:
+    POP BX
+    LOOP AGAIN
+    
+    MOV BX, DX
+    MOV CX, 4H
+START:
+    PUSH CX
+
+    MOV CL, 4
+    ROL BX, CL
+    POP CX
+    MOV DL, BL
+    AND DL, 0FH
+    ADD DL, 30H
+    CMP DL, 39H
+    JLE PRINT
+    ADD DL, 07H
+
+PRINT:
+    MOV AH, 02H
+    INT 21H
+
+    LOOP START
+
+
+    MOV AH, 4CH
+    INT 21H
+MAIN ENDP
+END MAIN
